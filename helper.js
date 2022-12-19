@@ -18,9 +18,14 @@ export const parseSettings = (obj) => {
   if (!obj.email || (typeof obj.email === "string" && obj.email.length < 1)) {
     throw new Error("No email found. Check settings.json.");
   }
+  globalThis.verbose = obj.verbose;
 };
 
 export const getISOFormat = (date) => {
   if (!(date instanceof Date)) throw new Error("Argument must be of type Date");
   return date.toISOString().split(".")[0] + "Z";
+};
+
+export const delay = (t, v) => {
+  return new Promise((resolve) => setTimeout(resolve, t, v));
 };

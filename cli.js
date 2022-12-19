@@ -72,6 +72,26 @@ const init = async () => {
           })
         )
     )
+    .command(
+      "importUsers <csvfile>",
+      "Import all users from the csvfile.",
+      (argv) => {
+        argv
+          .positional("csvfile", {
+            describe:
+              "Format must be like this:\nname;email;role\nNo trailing line expected.",
+            type: "string",
+          })
+          .option("fire", {
+            alias: "f",
+            type: "boolean",
+            description:
+              "Fire the import. If obmitted, a dry run will be performed.",
+          });
+      },
+      async (argv) =>
+        await Clockodo.importUsers({ csvfile: argv.csvfile, dryrun: !argv.f })
+    )
     .demandCommand()
     .example("$0 getUsers").argv;
 };
