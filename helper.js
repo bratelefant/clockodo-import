@@ -1,6 +1,3 @@
-import { readFile } from "fs/promises";
-import { getUsers } from "./clockodo.js";
-
 export const commands = [
   {
     name: "getUsers",
