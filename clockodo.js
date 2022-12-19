@@ -96,7 +96,7 @@ Clockodo.getEntries = async ({ timeSince, timeUntil }) => {
  * @param {String} params.csvfile The file to read data from. Must be UTF-8 encoded. Format: name;email:role\n
  * @param {boolean} params.dryrun If true, the request will not be fired but infos on the parsed data will be sent to console
  */
-Clockodo.importUsers = async ({ csvfile, dryrun = true }) => {
+Clockodo.importUsers = async ({ csvfile, dryrun = true, limit }) => {
   dryrun &&
     console.info(
       "### This is a dry run. Nothing is sent to the Clockodo server. ###\n"
@@ -131,7 +131,14 @@ Clockodo.importUsers = async ({ csvfile, dryrun = true }) => {
     data.length > 1 &&
     console.log("First of them is " + JSON.stringify(data[0], null, 2));
 
+  var count = 0;
+
   for (const body of data) {
+    if (limit !== undefined && count >= limit) {
+      globalThis.verbose &&
+        console.log("Limit of " + limit + " entries reached, stopping.");
+      return;
+    }
     const request = {
       method: "post",
       body: JSON.stringify(body),
@@ -151,5 +158,6 @@ Clockodo.importUsers = async ({ csvfile, dryrun = true }) => {
     globalThis.verbose &&
       console.log("Waiting for " + batchDelay + " ms before next request.");
     await delay(batchDelay);
+    count++;
   }
 };

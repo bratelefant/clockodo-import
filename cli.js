@@ -87,10 +87,19 @@ const init = async () => {
             type: "boolean",
             description:
               "Fire the import. If obmitted, a dry run will be performed.",
+          })
+          .option("limit", {
+            alias: "l",
+            type: "integer",
+            description: "Only the specified number of entries.",
           });
       },
       async (argv) =>
-        await Clockodo.importUsers({ csvfile: argv.csvfile, dryrun: !argv.f })
+        await Clockodo.importUsers({
+          csvfile: argv.csvfile,
+          dryrun: !argv.f,
+          limit: argv.l,
+        })
     )
     .demandCommand()
     .example("$0 getUsers").argv;
