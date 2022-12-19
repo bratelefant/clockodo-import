@@ -1,5 +1,5 @@
 {
-  "name": "clockodo-import",
+  "name": "nodejs-clockodo",
   "version": "1.0.0",
   "description": "Importieren von Datensätzen in Clockodo über die API Schnittstelle",
   "main": "index.js",

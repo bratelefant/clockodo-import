@@ -3,7 +3,7 @@ This is a simple node package for using some of the endpoints of [https://www.cl
 # Installation
 
 ```
-npm install git+https://github.com/bratelefant/clockodo-import.git
+npm install git+https://github.com/bratelefant/nodejs-clockodo.git
 ```
 
 # Usage
@@ -11,7 +11,7 @@ npm install git+https://github.com/bratelefant/clockodo-import.git
 Import and configure the module like so
 
 ```
-import { Clockodo } from "clockodo-import";
+import { Clockodo } from "nodejs-clockodo";
 
 Clockodo.configure({
     server: "https://my.clockodo.com/api/",
