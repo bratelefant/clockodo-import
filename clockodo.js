@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { getISOFormat } from "./helper.js";
 
 /**
  * Get the HTTP headers for requests.
@@ -8,6 +9,7 @@ const getHeaders = () => {
   return {
     "X-ClockodoApiUser": Clockodo.settings.email,
     "X-ClockodoApiKey": Clockodo.settings.apikey,
+    "X-Clockodo-External-Application": "nodejs-clockodo",
   };
 };
 
@@ -44,10 +46,39 @@ Clockodo.getUsers = async () => {
   return await response.json();
 };
 
-Clockodo.getAbsences = async (year) => {
+/**
+ *
+ * @param {Object} param0 Param Object
+ * @param {Number} param0.year Year of the absence entries
+ * @returns Array of absences
+ */
+Clockodo.getAbsences = async ({ year }) => {
   if (!year) throw new Error("Year required");
   const response = await fetch(
     Clockodo.settings.server + "absences?year=" + year,
+    {
+      method: "get",
+      headers: getHeaders(),
+    }
+  );
+  return await response.json();
+};
+
+Clockodo.getEntries = async ({ timeSince, timeUntil }) => {
+  if (
+    !timeSince ||
+    !timeUntil ||
+    !(timeSince instanceof Date) ||
+    !(timeUntil instanceof Date)
+  )
+    throw new Error("timeSince and timeUntil are required Date objects");
+
+  const response = await fetch(
+    Clockodo.settings.server +
+      "v2/entries?time_since=" +
+      getISOFormat(timeSince) +
+      "&time_until=" +
+      getISOFormat(timeUntil),
     {
       method: "get",
       headers: getHeaders(),

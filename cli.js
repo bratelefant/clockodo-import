@@ -45,7 +45,32 @@ const init = async () => {
           default: new Date().getFullYear(),
         });
       },
-      async (argv) => console.log(await Clockodo.getAbsences(argv.year))
+      async (argv) =>
+        console.log(await Clockodo.getAbsences({ year: argv.year }))
+    )
+    .command(
+      "getEntries [timeSince] [timeUntil]",
+      "Get all entries between the dates.",
+      (argv) => {
+        argv
+          .positional("timeSince", {
+            describe: "Entries since what date.",
+            type: "string",
+            default: new Date(new Date().setUTCHours(0, 0, 0, 0)),
+          })
+          .positional("timeUntil", {
+            describe: "Entries until what date.",
+            type: "string",
+            default: new Date(new Date().setUTCHours(23, 59, 59, 999)),
+          });
+      },
+      async (argv) =>
+        console.log(
+          await Clockodo.getEntries({
+            timeSince: argv.timeSince,
+            timeUntil: argv.timeUntil,
+          })
+        )
     )
     .demandCommand()
     .example("$0 getUsers").argv;

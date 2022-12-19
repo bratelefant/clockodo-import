@@ -19,3 +19,8 @@ export const parseSettings = (obj) => {
     throw new Error("No email found. Check settings.json.");
   }
 };
+
+export const getISOFormat = (date) => {
+  if (!(date instanceof Date)) throw new Error("Argument must be of type Date");
+  return date.toISOString().split(".")[0] + "Z";
+};
