@@ -35,6 +35,9 @@ const init = async () => {
     .command("getUsers", "Get all clockodo users.", {}, async () =>
       console.log(await Clockodo.getUsers())
     )
+    .command("getTeams", "Get all teams.", {}, async () =>
+      console.log(await Clockodo.getTeams())
+    )
     .command(
       "getAbsences [year]",
       "Get all absences for a year.",
@@ -79,7 +82,7 @@ const init = async () => {
         argv
           .positional("csvfile", {
             describe:
-              "Format must be like this:\nname;email;role\nNo trailing line expected.",
+              "Format must be like this:\nname;email;role;teamsId\nNo trailing line expected. Only name, email and role is required.",
             type: "string",
           })
           .option("fire", {

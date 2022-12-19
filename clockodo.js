@@ -90,6 +90,14 @@ Clockodo.getEntries = async ({ timeSince, timeUntil }) => {
   return await response.json();
 };
 
+Clockodo.getTeams = async () => {
+  const response = await fetch(Clockodo.settings.server + "v2/teams", {
+    method: "get",
+    headers: getHeaders(),
+  });
+  return await response.json();
+};
+
 /**
  * Basic user import
  * @param {Object} params
@@ -108,7 +116,7 @@ Clockodo.importUsers = async ({ csvfile, dryrun = true, limit }) => {
   const data = [];
   lines.forEach((line) => {
     const linedata = line.split(";");
-    if (!linedata.length === 3)
+    if (linedata.length < 3)
       throw new Error(
         "Couldn't parse CSV data. Seems like your file is not properly formated."
       );
@@ -119,9 +127,16 @@ Clockodo.importUsers = async ({ csvfile, dryrun = true, limit }) => {
           " with mail " +
           linedata[1] +
           " and role " +
-          linedata[2]
+          linedata[2] +
+          ", teamId: " +
+          linedata[3]
       );
-    data.push({ name: linedata[0], email: linedata[1], role: linedata[2] });
+    data.push({
+      name: linedata[0],
+      email: linedata[1],
+      role: linedata[2],
+      teams_id: linedata[3],
+    });
   });
 
   (dryrun || globalThis.verbose) &&
