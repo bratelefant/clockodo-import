@@ -1,0 +1,11 @@
+{
+  "name": "clockodo-import",
+  "version": "1.0.0",
+  "description": "Importieren von Datensätzen in Clockodo über die API Schnittstelle",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Christian Wahle",
+  "license": "MIT"
+}
