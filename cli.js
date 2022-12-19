@@ -1,17 +1,16 @@
+#!/usr/bin/env node
 import { readFile } from "fs/promises";
-import { helptext, parseArgs, parseSettings } from "./helper.js";
+import { parseSettings } from "./helper.js";
 import { Clockodo } from "./index.js";
+import yargs from "yargs/yargs";
+import { hideBin } from "yargs/helpers";
+
+var argv;
 
 /**
  * Initialize App
  */
 const init = async () => {
-  try {
-    parseArgs();
-  } catch (e) {
-    console.warn("Command line params not ok:\n", e.message);
-  }
-
   var jsonString;
 
   try {
@@ -30,21 +29,30 @@ const init = async () => {
     console.warn("Settings are not ok: ", e.message);
   }
   Clockodo.configure(json);
+
+  argv = yargs(hideBin(process.argv))
+    .usage("Usage: $0 <command> [options]")
+    .command("getUsers", "Get all clockodo users.", {}, async () =>
+      console.log(await Clockodo.getUsers())
+    )
+    .command(
+      "getAbsences [year]",
+      "Get all absences for a year.",
+      (argv) => {
+        argv.positional("year", {
+          describe: "Absence Year",
+          type: "integer",
+          default: new Date().getFullYear(),
+        });
+      },
+      async (argv) => console.log(await Clockodo.getAbsences(argv.year))
+    )
+    .demandCommand()
+    .example("$0 getUsers").argv;
 };
 
 try {
   await init();
-
-  switch (globalThis.command) {
-    case "getUsers":
-      console.log(await Clockodo.getUsers());
-      break;
-    case "getAbsences":
-      console.log(await Clockodo.getAbsences(parseInt(process.argv[3])));
-      break;
-    default:
-      console.log(helptext);
-  }
 } catch (e) {
   console.log(e);
 }
