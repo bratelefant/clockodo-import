@@ -1,35 +1,10 @@
-import { parseCsv } from "./parsecsv.js";
 import { readFile } from "fs/promises";
 import { getUsers } from "./clockodo.js";
+import { helptext, parseArgs, parseSettings } from "./helper.js";
 
-const parseArgs = () => {
-  if (process.argv.length < 3) {
-    throw new Error("Need a CSV file as a parameter.");
-  }
-  globalThis.csvFilename = process.argv[2];
-};
-
-const parseSettings = (obj) => {
-  if (
-    !obj.apikey ||
-    (typeof obj.apikey === "string" && obj.apikey.length < 1)
-  ) {
-    throw new Error("No API key present. Check settings.json.");
-  }
-  if (
-    !obj.server ||
-    (typeof obj.server === "string" && obj.server.length < 1)
-  ) {
-    throw new Error("No API server found. Check settings.json.");
-  }
-  if (
-    !obj.email ||
-    (typeof obj.email === "string" && obj.email.length < 1)
-  ) {
-    throw new Error("No email found. Check settings.json.");
-  }
-};
-
+/**
+ * Initialize App
+ */
 const init = async () => {
   try {
     parseArgs();
@@ -50,6 +25,16 @@ const init = async () => {
   globalThis.verbose && console.log("Initialized settings and global object.");
 };
 
-await init();
-parseCsv(globalThis.csvFilename);
-console.log(await getUsers());
+try {
+  await init();
+
+  switch (globalThis.command) {
+    case "getUsers":
+      console.log(await getUsers());
+      break;
+    default:
+      console.log(helptext);
+  }
+} catch (e) {
+  console.log(e);
+}
