@@ -21,6 +21,18 @@ Clockodo.settings = {
 };
 
 /**
+ * Setup Clockodo
+ * @param {Object} settings
+ * @param {String} settings.server Server URL with trailing slash
+ * @param {String} settings.email Clockodo E-mail
+ * @param {String} settings.apikey Clockodo API Key
+ * @param {boolean} settings.verbose Log stuff
+ */
+Clockodo.configure = ({ server, email, apikey, verbose }) => {
+  Clockodo.settings = { server, email, apikey, verbose };
+};
+
+/**
  * Get all Clockodo users.
  * @returns Array containing all the users.
  */
@@ -32,14 +44,14 @@ Clockodo.getUsers = async () => {
   return await response.json();
 };
 
-/**
- * Setup Clockodo
- * @param {Object} settings
- * @param {String} settings.server Server URL with trailing slash
- * @param {String} settings.email Clockodo E-mail
- * @param {String} settings.apikey Clockodo API Key
- * @param {boolean} settings.verbose Log stuff
- */
-Clockodo.configure = ({ server, email, apikey, verbose }) => {
-  Clockodo.settings = { server, email, apikey, verbose };
+Clockodo.getAbsences = async (year) => {
+  if (!year) throw new Error("Year required");
+  const response = await fetch(
+    Clockodo.settings.server + "absences?year=" + year,
+    {
+      method: "get",
+      headers: getHeaders(),
+    }
+  );
+  return await response.json();
 };

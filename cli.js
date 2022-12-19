@@ -39,6 +39,9 @@ try {
     case "getUsers":
       console.log(await Clockodo.getUsers());
       break;
+    case "getAbsences":
+      console.log(await Clockodo.getAbsences(parseInt(process.argv[3])));
+      break;
     default:
       console.log(helptext);
   }

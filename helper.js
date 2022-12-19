@@ -1,9 +1,13 @@
 export const commands = [
   {
     name: "getUsers",
-    additionalArgs: 0,
+    additionalArgs: [],
   },
-  { name: "help" },
+  {
+    name: "getAbsences",
+    additionalArgs: [{ name: "Year", type: "Integer" }],
+  },
+  { name: "help", additionalArgs: [] },
 ];
 
 export const helptext =
@@ -20,7 +24,16 @@ export const parseArgs = () => {
   if (!commands.some((c) => c.name === process.argv[2])) {
     throw new Error("Command " + process.argv[2] + " is unknown.");
   }
+
+  if (
+    process.argv.length <
+    3 + commands.find((i) => i.name === process.argv[2]).additionalArgs.length
+  ) {
+    throw new Error("Some required args are missing for this command.");
+  }
+
   globalThis.command = process.argv[2];
+  globalThis.args = process.argv;
 };
 
 /**

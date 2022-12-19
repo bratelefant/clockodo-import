@@ -2,6 +2,8 @@ This is a simple node package for using some of the endpoints of [https://www.cl
 
 # Installation
 
+There's no release yet on npm, so you must install from github directly.
+
 ```
 npm install git+https://github.com/bratelefant/nodejs-clockodo.git
 ```
