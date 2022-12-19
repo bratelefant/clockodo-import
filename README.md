@@ -25,4 +25,4 @@ Clockodo.configure({
 
 # CLI
 
-Configure CLI by copying `settings.json.example` to `settings.json` and fill in the required infos. Start by `npm run cli`.
+Configure CLI by copying `settings.json.example` to `settings.json` and fill in the required infos. Start by making the `cli.js` user executable by running `chmod u+x` and then use run the cli interface by `./cli.js`.
