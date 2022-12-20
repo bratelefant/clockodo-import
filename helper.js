@@ -18,6 +18,14 @@ export const parseSettings = (obj) => {
   if (!obj.email || (typeof obj.email === "string" && obj.email.length < 1)) {
     throw new Error("No email found. Check settings.json.");
   }
+  if (
+    !obj.devmail ||
+    (typeof obj.devmail === "string" && obj.devmail.length < 1)
+  ) {
+    throw new Error(
+      "No developer email found. Clockodo likes to know this. Check settings.json."
+    );
+  }
   globalThis.verbose = obj.verbose;
 };
 

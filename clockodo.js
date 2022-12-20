@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { delay, getISOFormat } from "./helper.js";
 import { readFile } from "fs/promises";
 
-const batchDelay = 2000;
+const batchDelay = 1000;
 /**
  * Get the HTTP headers for requests.
  * @returns Header for API authentication using infos from settings.json
@@ -12,7 +12,7 @@ const getHeaders = () => {
     "X-ClockodoApiUser": Clockodo.settings.email,
     "X-ClockodoApiKey": Clockodo.settings.apikey,
     "X-Clockodo-External-Application":
-      "nodejs-clockodo;" + Clockodo.settings.email,
+      "nodejs-clockodo;" + Clockodo.settings.devmail,
   };
 };
 
@@ -21,6 +21,7 @@ export const Clockodo = {};
 Clockodo.settings = {
   server: undefined,
   email: undefined,
+  devmail: undefined,
   apikey: undefined,
   verbose: false,
 };
@@ -30,11 +31,12 @@ Clockodo.settings = {
  * @param {Object} settings
  * @param {String} settings.server Server URL with trailing slash
  * @param {String} settings.email Clockodo E-mail
+ * @param {String} settings.email Developer E-mail (that's you!)
  * @param {String} settings.apikey Clockodo API Key
  * @param {boolean} settings.verbose Log stuff
  */
-Clockodo.configure = ({ server, email, apikey, verbose }) => {
-  Clockodo.settings = { server, email, apikey, verbose };
+Clockodo.configure = ({ server, email, devmail, apikey, verbose }) => {
+  Clockodo.settings = { server, email, devmail, apikey, verbose };
 };
 
 /**
@@ -168,6 +170,9 @@ Clockodo.importUsers = async ({ csvfile, dryrun = true, limit }) => {
       console.log("\nThis is a dryrun. Don't send anything.");
     } else {
       globalThis.verbose && console.log("Fire request");
+      const response = await fetch(Clockodo.settings.server + "users", request);
+      globalThis.verbose && console.log("Request sent. Server response:");
+      globalThis.verbose && console.log(await response.json());
     }
 
     globalThis.verbose &&

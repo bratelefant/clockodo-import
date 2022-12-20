@@ -1,6 +1,7 @@
 {
     "server": "https://my.clockodo.com/api/",
     "email": "",
+    "devmail": "",
     "apikey": "1234",
     "verbose": true
 }
