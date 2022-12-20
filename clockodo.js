@@ -145,7 +145,7 @@ Clockodo.importUsers = async ({ csvfile, dryrun = true, limit }) => {
     console.log("Collected " + data.length + " sets of user data");
 
   (dryrun || globalThis.verbose) &&
-    data.length > 1 &&
+    data.length >= 1 &&
     console.log("First of them is " + JSON.stringify(data[0], null, 2));
 
   var count = 0;
@@ -159,7 +159,7 @@ Clockodo.importUsers = async ({ csvfile, dryrun = true, limit }) => {
     const request = {
       method: "post",
       body: JSON.stringify(body),
-      headers: getHeaders(),
+      headers: { ...getHeaders(), "Content-Type": "application/json" },
     };
 
     (dryrun || globalThis.verbose) &&
