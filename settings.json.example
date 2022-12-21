@@ -3,5 +3,6 @@
     "email": "",
     "devmail": "",
     "apikey": "1234",
+    "mailToUser": false,
     "verbose": true
 }

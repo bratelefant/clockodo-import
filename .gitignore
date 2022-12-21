@@ -131,3 +131,4 @@ dist
 
 settings.json
 test.csv
+*.csv

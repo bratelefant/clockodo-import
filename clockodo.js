@@ -23,6 +23,7 @@ Clockodo.settings = {
   email: undefined,
   devmail: undefined,
   apikey: undefined,
+  mailToUser: false,
   verbose: false,
 };
 
@@ -33,10 +34,18 @@ Clockodo.settings = {
  * @param {String} settings.email Clockodo E-mail
  * @param {String} settings.email Developer E-mail (that's you!)
  * @param {String} settings.apikey Clockodo API Key
+ * @param {boolean} settings.mailToUser Send mail to new users
  * @param {boolean} settings.verbose Log stuff
  */
-Clockodo.configure = ({ server, email, devmail, apikey, verbose }) => {
-  Clockodo.settings = { server, email, devmail, apikey, verbose };
+Clockodo.configure = ({
+  server,
+  email,
+  devmail,
+  apikey,
+  mailToUser,
+  verbose,
+}) => {
+  Clockodo.settings = { server, email, devmail, apikey, mailToUser, verbose };
 };
 
 /**
@@ -133,12 +142,14 @@ Clockodo.importUsers = async ({ csvfile, dryrun = true, limit }) => {
           ", teamId: " +
           linedata[3]
       );
-    data.push({
+    const entry = {
       name: linedata[0],
       email: linedata[1],
       role: linedata[2],
       teams_id: linedata[3],
-    });
+    };
+    entry["mail_to_user"] = !!Clockodo.settings.mailToUser;
+    data.push(entry);
   });
 
   (dryrun || globalThis.verbose) &&
